@@ -1,6 +1,15 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  namespace :api do
+    namespace :v1 do
+      resources 'orderitems'
+      resources 'menuitems'
+      resources 'orders'
+      resources 'restaurants'
+    end
+  end
+
   devise_for :users, path: 'devise', path_names: {
     sign_in: 'login',
     sign_out: 'logout',
@@ -11,10 +20,4 @@ Rails.application.routes.draw do
                        sessions: 'api/v1/sessions',
                        registrations: 'api/v1/registrations'
                      }
-
-  # devise_for :users
-  # Authentication
-  # post "/signup", "authentication#create"
-
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

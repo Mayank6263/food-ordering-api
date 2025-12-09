@@ -4,8 +4,8 @@ class CreateOrders < ActiveRecord::Migration[5.0]
   def change
     create_table :orders do |t|
       t.decimal :total_amount
-      t.string :status
-      t.references :user_id
+      t.integer :status, null: false, default: 0
+      t.references :user, foreign_key: true
 
       t.timestamps
     end

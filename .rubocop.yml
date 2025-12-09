@@ -1,0 +1,30 @@
+# .rubocop.yml
+require:
+  - rubocop-rails
+  # Optional: - rubocop-rspec
+
+Style/Documentation:
+  Enabled: false
+
+Rails/NotNullColumn:
+  Exclude:
+    - 'db/migrate/**/*'
+
+Rails/FilePath:
+  Exclude:
+    - 'config/initializers/*'
+    
+AllCops:
+  Exclude:
+    - 'db/schema.rb'
+    - 'vendor/**/*'
+    # Add other exclusions as needed
+
+# Example: Configure a specific cop
+Layout/LineLength:
+  Max: 120
+
+# You can also set the target Rails version explicitly if needed
+# RuboCop Rails will attempt to infer it from Gemfile.lock otherwise
+Rails:
+  TargetRailsVersion: 5.2 # Or your specific Rails 5 version

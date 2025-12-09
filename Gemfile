@@ -56,3 +56,7 @@ gem 'devise-jwt', '~> 0.8.1'
 gem 'fast_jsonapi', '~> 1.5'
 
 gem 'figaro', '~> 1.3'
+
+gem 'geocoder', '~> 1.8'
+
+gem 'maxminddb', '~> 0.1.22'

@@ -14,6 +14,8 @@ module Api
           sign_in('user', @user)
           message = { message: 'Signed In Successfully.', token: token }
           render json: UserSerializer.new(@user, meta: message)
+        else
+          render json: { messages: 'Sign In Failed', status: :unprocessable_entity }
         end
       end
 

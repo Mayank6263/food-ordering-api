@@ -1,5 +1,3 @@
-# db/migrate/XXXXXX_add_devise_to_users.rb
-
 # frozen_string_literal: true
 
 class AddDeviseToUsers < ActiveRecord::Migration[5.0]
