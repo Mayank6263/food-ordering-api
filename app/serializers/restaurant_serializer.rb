@@ -2,5 +2,5 @@
 
 class RestaurantSerializer
   include FastJsonapi::ObjectSerializer
-  attributes id, name, address
+  attributes :name, :address
 end

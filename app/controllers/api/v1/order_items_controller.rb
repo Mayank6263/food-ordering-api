@@ -2,8 +2,9 @@
 
 module Api
   module V1
-    class OrderitemsController < ApplicationController
+    class OrderItemsController < ApplicationController
       before_action :find_order_item, except: %w[index create]
+      load_and_authorize_resource param_method: :order_item_params
 
       def index
         orderitems = OrderItem.all
@@ -11,8 +12,10 @@ module Api
       end
 
       def create
-        orderitem = OrderItem.create order_item_params
-        render json: { message: 'Successfully created OrderItem.', data: OrderItemSerializer.new(orderitem) }
+        @orderitem = OrderItem.new order_item_params
+        @orderitem.order_id = params[:order_id]
+        @orderitem.save!
+        render json: { message: 'Successfully selected OrderItem.', data: @orderitem }
       end
 
       def show
@@ -32,7 +35,7 @@ module Api
       private
 
       def order_item_params
-        params.require(orderitem).permit(:quantity, :order_id, :menu_item_id)
+        params.require(:orderitem).permit(:quantity, :menu_item_id)
       end
 
       def find_order_item

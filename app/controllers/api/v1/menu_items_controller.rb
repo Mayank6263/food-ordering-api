@@ -2,17 +2,21 @@
 
 module Api
   module V1
-    class MenuitemsController < ApplicationController
+    class MenuItemsController < ApplicationController
       before_action :find_menu_item, except: %w[index create]
+      load_and_authorize_resource param_method: :menu_items_params
 
       def index
-        menuitems = MenuItem.all
-        render json: { message: 'All available Items.', data: MenuItemSerializer.new(menuitems) }
+        restro = Restaurant.find params[:restaurant_id]
+        menuitems = restro.menu_items.all
+        render json: { message: 'All available Items.', data: menuitems }
       end
 
       def create
-        menuitem = MenuItem.create menu_items_params
-        render json: { message: 'Successfully Created MenuItem.', data: MenuItemSerializer.new(menuitem) }
+        @menuitem = MenuItem.new menu_items_params
+        @menuitem.restaurant_id = params[:restaurant_id]
+        @menuitem.save!
+        render json: { message: 'Successfully Created MenuItem.', data: MenuitemSerializer.new(@menuitem) }
       end
 
       def update
@@ -32,7 +36,7 @@ module Api
       private
 
       def menu_items_params
-        params.require(:menuitem).permit(:name, :price, :description, :restaurant_id)
+        params.require(:menuitem).permit(:name, :price, :description)
       end
 
       def find_menu_item

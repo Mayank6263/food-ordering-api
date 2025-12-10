@@ -3,12 +3,15 @@
 module Api
   module V1
     class RestaurantsController < ApplicationController
+      load_and_authorize_resource param_method: :restro_params
       before_action :find_restro, except: %w[index create]
 
       def index
         restaurant = Restaurant.all
-        render json: { data: restaurant }
+        render json: { message: 'All restro ', data: restaurant }
       end
+
+      def select; end
 
       def create
         restaurant = Restaurant.new restro_params
