@@ -60,3 +60,7 @@ gem 'figaro', '~> 1.3'
 gem 'geocoder', '~> 1.8'
 
 gem 'maxminddb', '~> 0.1.22'
+
+gem 'rspec-rails', '~> 4.1'
+
+gem 'cancancan', '~> 3.0'

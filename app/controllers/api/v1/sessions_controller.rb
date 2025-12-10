@@ -15,7 +15,7 @@ module Api
           message = { message: 'Signed In Successfully.', token: token }
           render json: UserSerializer.new(@user, meta: message)
         else
-          render json: { messages: 'Sign In Failed', status: :unprocessable_entity }
+          render json: { message: 'Sign In failed.' }
         end
       end
 
@@ -29,6 +29,7 @@ module Api
         @user = User.find_for_database_authentication(email: sign_in_params[:email])
         render json: { messages: 'Cannot find user', status: :not_found, data: {} } unless @user
       end
+
       # GET /resource/sign_in
       # def new
       #   super

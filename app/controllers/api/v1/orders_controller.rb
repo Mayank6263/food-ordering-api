@@ -4,6 +4,7 @@ module Api
   module V1
     class OrdersController < ApplicationController
       before_action :find_order, except: %w[index create]
+      load_and_authorize_resource
 
       def index
         orders = Order.all
@@ -13,17 +14,23 @@ module Api
       def create
         @order = Order.new order_params
         @order.user_id = @current_user.id
-        @order.save
-        render json: { message: 'Your Order', data: OrderSerializer.new(orders) }
+        render json: { message: 'Your Order', data: OrderSerializer.new(@orders) } if @order.save!
       end
 
       def show
-        render json: OrderSerializer.new(orders)
+        render json: OrderSerializer.new(@order)
       end
 
       def update
         @order.update order_params
-        render json: { message: 'Updated Order', data: OrderSerializer.new(@order) }
+        case @order.status
+        when 'ordered'
+          render json: { message: 'Your Order is on way.', order_details: OrderSerializer.new(@order) }
+        when 'delivered'
+          render json: { message: 'Your Order is delivered Successfully.', order_details: OrderSerializer.new(@order) }
+        else
+          render json: { message: 'Your Order is yet to Order.', order_details: OrderSerializer.new(@order) }
+        end
       end
 
       def destroy

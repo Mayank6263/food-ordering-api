@@ -2,5 +2,5 @@
 
 class MenuitemSerializer
   include FastJsonapi::ObjectSerializer
-  attributes id, name, price, description, restaurant_id
+  attributes :name, :price, :description, :restaurant_id
 end

@@ -9,4 +9,10 @@ class User < ApplicationRecord
             format: { with: /\A(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}\z/,
                       message: 'password must be 6 characters, include one uppercase, lowercase letter, and number' }
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable
+  enum role: { user: 0, admin: 1, seller: 2, driver: 3 }
+  after_initialize :set_default_role, if: :new_record?
+
+  def set_default_role
+    self.role ||= :user
+  end
 end

@@ -24,6 +24,9 @@ AllCops:
 Layout/LineLength:
   Max: 120
 
+Metrics/MethodLength:
+  Max: 20
+
 # You can also set the target Rails version explicitly if needed
 # RuboCop Rails will attempt to infer it from Gemfile.lock otherwise
 Rails:

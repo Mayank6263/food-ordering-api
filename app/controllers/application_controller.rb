@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::API
+  include ErrorHandlingConcern
   before_action :authenticate_user
-  rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity
-  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
+  # before_action do
+  #   resource = controller_name.singularize.to_sym
+  #   method = "#{resource}_params"
+  #   params[resource] &&= send(method) if respond_to?(method, true)
+  # end
   private
 
   def authenticate_user
@@ -24,17 +28,5 @@ class ApplicationController < ActionController::API
     end
   end
 
-  def render_unprocessable_entity(exception)
-    render json: {
-      error: 'Validation failed',
-      messages: exception.record.errors.full_messages
-    }, status: :unprocessable_entity
-  end
-
-  def record_not_found
-    model_name = self.class.name.demodulize.sub('Controller', '').singularize
-    render json: {
-      messages: "#{model_name} doesn't Exists. "
-    }
-  end
+  attr_reader :current_user
 end
