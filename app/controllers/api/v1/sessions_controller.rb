@@ -15,7 +15,7 @@ module Api
           message = { message: 'Signed In Successfully.', token: token }
           render json: UserSerializer.new(@user, meta: message)
         else
-          render json: { message: 'Sign In failed.' }
+          render json: { message: 'Invalid Password.' }
         end
       end
 

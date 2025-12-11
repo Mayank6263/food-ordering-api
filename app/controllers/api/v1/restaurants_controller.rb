@@ -20,7 +20,7 @@ module Api
       end
 
       def show
-        render json: { data: @restaurant }
+        render json: { message: "Restaurant Details", data: @restaurant, Menu_Items: @restaurant.menu_items }
       end
 
       def update
