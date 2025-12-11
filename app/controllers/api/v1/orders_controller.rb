@@ -7,27 +7,34 @@ module Api
       load_and_authorize_resource
 
       def index
-        orders = Order.all
-        render json: { message: 'Your all Orders', data: OrderSerializer.new(orders) }
+        orders = @current_user.orders
+        render json: { message: 'Your all Orders', data: OrderSerializer.new(orders), Order_Items: orders.order_items }
       end
 
       def create
         @order = Order.new order_params
         @order.user_id = @current_user.id
-        render json: { message: 'Your Order', data: OrderSerializer.new(@orders) } if @order.save!
+        @order.save!
+        render json: { message: 'Your Order', data: OrderSerializer.new(@orders) }
       end
 
       def show
-        render json: OrderSerializer.new(@order)
+        render json: { Order_detail: OrderSerializer.new(@order), Items: @order.order_items }
       end
 
       def update
-        @order.update order_params
+        # byebug
+        @order.status = params[:order][:status]
+        @order.total_amount = @order.menu_items.sum(:price*:quantity) if @order.status == 'ordered'
+        @order.save
+
         case @order.status
         when 'ordered'
           render json: { message: 'Your Order is on way.', order_details: OrderSerializer.new(@order) }
         when 'delivered'
           render json: { message: 'Your Order is delivered Successfully.', order_details: OrderSerializer.new(@order) }
+        when 'cancel'
+          render json: { message: 'Your Order is Cancelled.', order_details: OrderSerializer.new(@order) }
         else
           render json: { message: 'Your Order is yet to Order.', order_details: OrderSerializer.new(@order) }
         end
@@ -45,7 +52,8 @@ module Api
       end
 
       def find_order
-        @order = Order.find params[:id]
+        # byebug
+        @order = @current_user.orders.find params[:id]
       end
     end
   end

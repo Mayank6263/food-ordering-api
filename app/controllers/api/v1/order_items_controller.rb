@@ -12,10 +12,11 @@ module Api
       end
 
       def create
-        @orderitem = OrderItem.new order_item_params
+        @order = Order.create(user_id: @current_user.id)
+        @orderitem = @order.order_items.new order_item_params
         @orderitem.order_id = params[:order_id]
         @orderitem.save!
-        render json: { message: 'Successfully selected OrderItem.', data: @orderitem }
+        render json: { message: 'Successfully added Item to cart.', data: @orderitem }
       end
 
       def show
