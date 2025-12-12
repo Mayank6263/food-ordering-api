@@ -65,4 +65,4 @@ gem 'rspec-rails', '~> 4.1'
 
 gem 'cancancan', '~> 3.0'
 
-gem "awesome_print", "~> 1.9"
+gem 'awesome_print', '~> 1.9'
