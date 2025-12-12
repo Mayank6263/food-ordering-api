@@ -2,5 +2,5 @@
 
 class OrderSerializer
   include FastJsonapi::ObjectSerializer
-  attributes :total_amount, :status, :user_id
+  attributes :total_amount, :status, :user_id, :order_items
 end

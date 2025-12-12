@@ -7,29 +7,29 @@ module Api
       load_and_authorize_resource param_method: :order_item_params
 
       def index
-        orderitems = OrderItem.all
-        render json: { data: OrderItemSerializer.new(orderitems) }
+        order_items = OrderItem.all
+        render json: { data: OrderItemSerializer.new(order_items) }
       end
 
       def create
-        @order = Order.create(user_id: @current_user.id)
-        @orderitem = @order.order_items.new order_item_params
-        @orderitem.order_id = params[:order_id]
-        @orderitem.save!
-        render json: { message: 'Successfully added Item to cart.', data: @orderitem }
+        order = Order.create(user_id: current_user.id)
+        order_item = order.order_items.new order_item_params
+        order_item.order_id = params[:order_id]
+        order_item.save!
+        render json: { message: 'Successfully added Item to cart.', data: order_item }
       end
 
       def show
-        render json: OrderItemSerializer.new(@orderitem)
+        render json: OrderItemSerializer.new(order_item)
       end
 
       def update
-        @orderitem = OrderItem.update order_item_params
-        render json: OrderItemSerializer.new(@orderitem)
+        order_item = OrderItem.update order_item_params
+        render json: OrderItemSerializer.new(order_item)
       end
 
       def destroy
-        @orderitem.destroy
+        order_item.destroy
         render json: { message: 'Successfully deleted Order Item' }
       end
 
@@ -40,8 +40,10 @@ module Api
       end
 
       def find_order_item
-        @orderitem = OrderItem.find params[:id]
+        @order_item = OrderItem.find params[:id]
       end
+
+      attr_reader :order_item
     end
   end
 end
