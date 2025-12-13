@@ -5,7 +5,16 @@ module PaginationConcern
 
   def paginate_attributes
     @model = controller_name.capitalize.classify.constantize
+    # byebug
+    return for_menu_item if @model == MenuItem
+
     @result = @model.all.paginate(page: params[:page], per_page: params[:per_page])
+    return_page
+  end
+
+  def for_menu_item
+    restro = Restaurant.find params[:restaurant_id]
+    @result = restro.menu_items.all.paginate(page: params[:page], per_page: params[:per_page])
     return_page
   end
 

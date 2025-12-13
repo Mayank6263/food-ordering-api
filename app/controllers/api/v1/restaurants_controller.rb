@@ -5,6 +5,7 @@ module Api
     class RestaurantsController < ApplicationController
       include PaginationConcern
       load_and_authorize_resource param_method: :restro_params
+      before_action :paginate_attributes, only: :index
       before_action :find_restro, except: %w[index create]
 
       def index
