@@ -5,7 +5,8 @@ module Api
     class MenuItemsController < ApplicationController
       include PaginationConcern
       before_action :find_menu_item, except: %w[index create]
-      before_action :restro_scope, only: :index
+      before_action :paginate_attributes, only: :index
+      # before_action :restro_scope, only: :index
       load_and_authorize_resource param_method: :menu_items_params
 
       def index
