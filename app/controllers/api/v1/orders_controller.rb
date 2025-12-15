@@ -4,15 +4,10 @@ module Api
   module V1
     class OrdersController < ApplicationController
       before_action :find_order, except: %w[index create]
-      before_action :paginate_attributes, only: :index
-
-      load_and_authorize_resource
+      load_and_authorize_resource param_method: :order_params
 
       def index
         orders = @current_user.orders
-        # order_items = orders.map do  |order|
-        #   order.order_items
-        # end
         render json: { your_orders: 'Your all Orders', data: OrderSerializer.new(orders) }
       end
 
@@ -20,17 +15,22 @@ module Api
         order = Order.new order_params
         order.user_id = current_user.id
         order.save!
-        render json: { message: 'Your Order', data: OrderSerializer.new(orders) }
+        render json: { message: 'Your Order', data: OrderSerializer.new(order) }
       end
 
       def show
-        render json: { Order_detail: OrderSerializer.new(order) }
+        # order_serializer = OrderSerializer.new(@order, except:  :id).to_json
+        render json: { Order_detail: OrderSerializer.new(@order) } # include: [:menu_items, :order_items], fields: {except: [:updated_at]}
       end
 
       def update
-        order.status = params[:order][:status]
+        return delivered?
+        @order.status = params[:order][:status]
         update_total
-        render json: { message: msg, order_details: OrderSerializer.new(order) }
+        order_status
+        @order.save!
+
+        render json: { message: "Your Order is #{@msg}", order_details: @order } # ,
       end
 
       def destroy
@@ -40,6 +40,10 @@ module Api
 
       private
 
+      def delivered?
+        render json: { message: "Order cannot be edited Once #{@order.status}ed" } if (@order.status == 'deliver' || @order.status == 'cancel') && (params[:order][:status] == 'deliver' || params[:order][:status] == 'cancel')
+      end
+
       def update_total
         return unless @order.status == 'ordered'
 
@@ -47,7 +51,20 @@ module Api
                       .joins(:menu_item)
                       .sum('quantity * price')
         @order.total_amount = total
-        @order.save
+        # @order.freeze
+      end
+
+      def order_status
+        @msg = case @order.status
+               when 'ordered'
+                 'is on way'
+               when 'delivered'
+                 'Delivered'
+               when 'cancel'
+                 'Cancelled'
+               else
+                 'yet to Order'
+               end
       end
 
       def order_params
@@ -57,8 +74,6 @@ module Api
       def find_order
         @order = current_user.orders.find params[:id]
       end
-
-      attr_reader :order
     end
   end
 end
