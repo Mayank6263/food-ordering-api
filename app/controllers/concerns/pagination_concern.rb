@@ -3,9 +3,12 @@
 module PaginationConcern
   extend ActiveSupport::Concern
 
+  included do
+    before_action :paginate_attributes, only: :index
+  end
+
   def paginate_attributes
     @model = controller_name.capitalize.classify.constantize
-    # byebug
     return for_menu_item if @model == MenuItem
 
     @result = @model.all.paginate(page: params[:page], per_page: params[:per_page])

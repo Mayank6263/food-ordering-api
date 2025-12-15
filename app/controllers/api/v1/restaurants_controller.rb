@@ -4,8 +4,8 @@ module Api
   module V1
     class RestaurantsController < ApplicationController
       include PaginationConcern
+
       load_and_authorize_resource param_method: :restro_params
-      before_action :paginate_attributes, only: :index
       before_action :find_restro, except: %w[index create]
 
       def index
@@ -19,7 +19,7 @@ module Api
       end
 
       def show
-        render json: { message: 'Restaurant Details', data: RestaurantSerializer.new(restaurant) }
+        render json: { message: 'Restaurant Details', data: RestaurantSerializer.new(@restaurant) }
       end
 
       def update
@@ -42,7 +42,7 @@ module Api
         @restaurant = Restaurant.find params[:id]
       end
 
-      attr_reader :restaurant
+      # attr_reader :restaurant
     end
   end
 end

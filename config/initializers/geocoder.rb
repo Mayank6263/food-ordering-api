@@ -1,32 +1,39 @@
 # frozen_string_literal: true
 
-require 'maxminddb'
+# require 'maxminddb'
 
-# Path to your MMDB file
-MMDB_PATH = Rails.root.join('lib', 'GeoLite2-City.mmdb').to_s
-
-# Extend Geocoder module to add IP lookup
-module Geocoder
-  def self.lookup_ip(ip)
-    @db ||= MaxMindDB.new(MMDB_PATH)
-    record = @db.lookup(ip)
-    return nil unless record.found?
-
-    { ip: ip,
-      city: record.city.name,
-      state: record.subdivisions.first&.name,
-      country: record.country.name,
-      latitude: record.location.latitude,
-      longitude: record.location.longitude }
-  end
-end
-
-# Configure Geocoder gem for future use if needed
-# (Optional, if you want to geocode full addresses too)
 Geocoder.configure(
-  timeout: 15,
-  units: :km
+  ip_lookup: :geoip2,
+  geoip2: {
+    file: 'vendor/GeoLite2-City.mmdb'
+  }
 )
+
+# # Path to your MMDB file
+# MMDB_PATH = Rails.root.join('lib', 'GeoLite2-City.mmdb').to_s
+
+# # Extend Geocoder module to add IP lookup
+# module Geocoder
+#   def self.lookup_ip(ip)
+#     @db ||= MaxMindDB.new(MMDB_PATH)
+#     record = @db.lookup(ip)
+#     return nil unless record.found?
+
+#     { ip: ip,
+#       city: record.city.name,
+#       state: record.subdivisions.first&.name,
+#       country: record.country.name,
+#       latitude: record.location.latitude,
+#       longitude: record.location.longitude }
+#   end
+# end
+
+# # Configure Geocoder gem for future use if needed
+# # (Optional, if you want to geocode full addresses too)
+# Geocoder.configure(
+#   timeout: 15,
+#   units: :km
+# )
 
 # Defualt
 
