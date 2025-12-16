@@ -6,6 +6,11 @@ Geocoder.configure(
   ip_lookup: :geoip2,
   geoip2: {
     file: 'vendor/GeoLite2-City.mmdb'
+  },
+  lookup: :nominatim,
+  timeout: 5,
+  http_headers: {
+    "User-Agent" => "food_ordering_api/5.0 (contact: mayanks@shriffle.com)"
   }
 )
 
