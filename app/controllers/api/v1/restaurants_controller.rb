@@ -9,6 +9,7 @@ module Api
       before_action :find_restro, except: %w[index create]
 
       def index
+        byebug
         render json: { message: 'All restro ', data: @result, page_detail: @page }
       end
 
