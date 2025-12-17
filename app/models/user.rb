@@ -2,6 +2,7 @@
 
 class User < ApplicationRecord
   include Devise::JWT::RevocationStrategies::JTIMatcher
+  
   has_many :orders, dependent: :destroy
   validates :email, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :name, presence: true

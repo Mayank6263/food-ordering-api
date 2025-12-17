@@ -9,12 +9,17 @@ module Api
       before_action :find_restro, except: %w[index create]
 
       def index
-        byebug
         render json: { message: 'All restro ', data: @result, page_detail: @page }
       end
 
       def create
         restaurant = Restaurant.new restro_params
+        # byebug
+        #  unless fetch_lat_long
+        #   render json: { message: "Can't find any latitude and longitude. Give a valide addresss" }
+        #   return
+        # end
+        fetch_lat_long
         restaurant.save!
         render json: { messages: 'Successfully Created Restaurant', data: RestaurantSerializer.new(restaurant) }
       end
@@ -24,8 +29,9 @@ module Api
       end
 
       def update
-        restaurant = Restaurant.update restro_params
-        render json: { data: restaurant }
+        @restaurant.update restro_params
+        byebug
+        render json: { message: 'Your Updated Restaurant.',data: @restaurant }
       end
 
       def destroy
@@ -35,8 +41,28 @@ module Api
 
       private
 
+      def fetch_lat_long
+        locations = Geocoder.search(params[:restaurant][:address])
+        return if locations.empty?
+        @result = {}
+        @result[:latitude] = locations[0].data["lat"]
+        @result[:longitude] = locations[0].data["lon"]
+        # extract_lat_longitude
+        return @result
+      end
+      
+      # def extract_lat_longitude
+      #   restaurant.lat = @result[:latitude]
+      #   restaurant.long = @result[:longitude]
+      # end
+
+      # def extract_address_from_fetched_location
+      # fetch_lat_long 
+      # location = @result[0].data["address"]["country"]
+      # end
+
       def restro_params
-        params.require(:restaurant).permit(:name, :address)
+        params.require(:restaurant).permit(:name,:address)
       end
 
       def find_restro
