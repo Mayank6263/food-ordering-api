@@ -7,7 +7,6 @@ module Api
       load_and_authorize_resource param_method: :order_item_params
 
       def index
-        # order_items = OrderItem.all
         render json: { data: OrderItemSerializer.new(@order_items) }
       end
 
@@ -24,7 +23,7 @@ module Api
       end
 
       def update
-        order_item = OrderItem.update order_item_params
+        order_item = @order_item.update order_item_params
         render json: OrderItemSerializer.new(order_item)
       end
 

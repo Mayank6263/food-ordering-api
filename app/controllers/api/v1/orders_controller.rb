@@ -24,7 +24,8 @@ module Api
       end
 
       def update
-        return delivered?
+        byebug
+        delivered?
         @order.status = params[:order][:status]
         update_total
         order_status

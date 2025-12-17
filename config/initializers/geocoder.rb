@@ -7,6 +7,7 @@ Geocoder.configure(
   geoip2: {
     file: 'vendor/GeoLite2-City.mmdb'
   },
+  units: :km,
   lookup: :nominatim,
   timeout: 5,
   http_headers: {

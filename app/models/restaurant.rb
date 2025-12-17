@@ -2,11 +2,11 @@
 
 class Restaurant < ApplicationRecord
   has_many :menu_items, dependent: :destroy
-  validates :name, presence: true
-  validates :address, presence: true
+  validates :name, :address, presence: true
   validate lambda {
              errors.add(:name, 'already exists') if !persisted? && Restaurant.exists?(name: name)
            }
+
   # geocoded_by :address         # tells Geocoder which column to geocode
   # after_validation :geocode, if: :address_changed?   # auto-fetch lat/lng
 

@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 # Restaurant
-restro = Restaurant.create(name: 'Guru Kripa', address: 'near Allen Solley, Satya Sai Square, Indore')
-restro1 = Restaurant.create(name: 'Pandit', address: 'Mangal city, Vijay nagar Square, Indore')
-restro2 = Restaurant.create(name: 'Nanaksar', address: 'Dewas naka, Indore')
-restro3 = Restaurant.create(name: 'Raja Ram dhaba', address: '78 Square, Indore')
-restro4 = Restaurant.create(name: "Kunafa's", address: 'Meghdoot garden, Indore')
-restro5 = Restaurant.create(name: 'Bapu ki Kutiya', address: 'Industry house, Indore')
-restro6 = Restaurant.create(name: 'Kitchen mistry', address: 'Palasiiya Square, Indore')
+restro = Restaurant.create(name: 'Guru Kripa', address: 'near Allen Solley, Satya Sai Square, Indore', lat:22.7551996, long:75.8967627)
+restro1 = Restaurant.create(name: 'Pandit', address: 'Mangal city, Vijay nagar Square, Indore', lat:22.7511477, long:75.8955492)
+restro2 = Restaurant.create(name: 'Nanaksar', address: 'Dewas naka, Indore', lat:22.7713004, long:75.9016826)
+restro3 = Restaurant.create(name: 'Raja Ram dhaba', address: '78 Square, Indore', lat:22.7551996, long:75.8967627)
+restro4 = Restaurant.create(name: "Kunafa's", address: 'Meghdoot garden, Indore', lat:22.7530097, long:75.8880722)
+restro5 = Restaurant.create(name: 'Bapu ki Kutiya', address: 'Industry house, Indore', lat:22.7289769, long:75.8886233)
+restro6 = Restaurant.create(name: 'Kitchen mistry', address: 'Palasiiya Square, Indore', lat:22.7237211, long:75.8872048)
 
 restaurants = [restro, restro1, restro2, restro3, restro4, restro5, restro6]
 

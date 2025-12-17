@@ -5,11 +5,10 @@ module Api
     class MenuItemsController < ApplicationController
       include PaginationConcern
       before_action :find_menu_item, except: %w[index create]
-      before_action :paginate_attributes, only: :index
-      # before_action :restro_scope, only: :index
       load_and_authorize_resource param_method: :menu_items_params
 
       def index
+        # byebug
         render json: { message: 'All available Items.', data: @result, page_details: @page }
       end
 
@@ -21,7 +20,7 @@ module Api
       end
 
       def update
-        @menu_item = MenuItem.update menu_items_params
+        @menu_item = @menu_item.update menu_items_params
         render json: { message: 'MenuItem is Updated Successfully.', data: MenuItemSerializer.new(menu_item) }
       end
 
@@ -35,8 +34,6 @@ module Api
       end
 
       private
-
-      # def restro_scope; end
 
       def menu_items_params
         params.require(:menuitem).permit(:name, :price, :description)

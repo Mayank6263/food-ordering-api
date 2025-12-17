@@ -8,6 +8,7 @@ module ErrorHandlingConcern
     rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
     rescue_from CanCan::AccessDenied, with: :access_denied
     rescue_from ArgumentError, with: :handle_argument_error
+    rescue_from JWT::ExpiredSignature, with: :expire_handle
   end
 
   # private
@@ -24,6 +25,12 @@ module ErrorHandlingConcern
       # Depending on your app's needs, you might want to re-raise, or render a generic 500
       raise exception
     end
+  end
+
+  def expire_handle
+    render json: {
+      messages: "Expired Token"
+    }
   end
 
   def render_unprocessable_entity(exception)

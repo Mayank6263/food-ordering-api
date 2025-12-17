@@ -4,7 +4,7 @@
 class JwtService
   SECRET_KEY = Rails.application.secrets.secret_key_base.to_s
 
-  def self.encode(payload, exp = 1.year.from_now)
+  def self.encode(payload, exp = 12.hours.from_now)
     user = User.find_by(id: payload[:user_id])
     payload[:jti] = user.jti
     payload[:exp] = exp.to_i
