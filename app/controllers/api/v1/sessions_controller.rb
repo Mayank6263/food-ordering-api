@@ -3,7 +3,6 @@
 module Api
   module V1
     class SessionsController < Devise::SessionsController
-      # before_action :configure_sign_in_params, only: [:create]
       skip_before_action :authenticate_user
       before_action :sign_in_params, only: :create
       before_action :load_user, only: :create

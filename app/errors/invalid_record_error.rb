@@ -1,0 +1,3 @@
+  class InvalidRecordError < StandardError 
+
+  end;

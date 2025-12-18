@@ -19,19 +19,14 @@ module Api
       end
 
       def show
-        # order_serializer = OrderSerializer.new(@order, except:  :id).to_json
         render json: { Order_detail: OrderSerializer.new(@order) } # include: [:menu_items, :order_items], fields: {except: [:updated_at]}
       end
 
       def update
-        byebug
-        delivered?
         @order.status = params[:order][:status]
-        update_total
-        order_status
         @order.save!
-
-        render json: { message: "Your Order is #{@msg}", order_details: @order } # ,
+        msg =  Order::STATUS_MESSAGES[@order.status]
+        render json: { message: "Your Order is #{ msg }", order_details: @order } # ,
       end
 
       def destroy
@@ -40,33 +35,6 @@ module Api
       end
 
       private
-
-      def delivered?
-        render json: { message: "Order cannot be edited Once #{@order.status}ed" } if (@order.status == 'deliver' || @order.status == 'cancel') && (params[:order][:status] == 'deliver' || params[:order][:status] == 'cancel')
-      end
-
-      def update_total
-        return unless @order.status == 'ordered'
-
-        total = @order.order_items
-                      .joins(:menu_item)
-                      .sum('quantity * price')
-        @order.total_amount = total
-        # @order.freeze
-      end
-
-      def order_status
-        @msg = case @order.status
-               when 'ordered'
-                 'is on way'
-               when 'delivered'
-                 'Delivered'
-               when 'cancel'
-                 'Cancelled'
-               else
-                 'yet to Order'
-               end
-      end
 
       def order_params
         params.require(:order).permit(:total_amount, :status)
