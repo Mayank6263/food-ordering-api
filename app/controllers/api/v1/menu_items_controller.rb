@@ -4,6 +4,7 @@ module Api
   module V1
     class MenuItemsController < ApplicationController
       include PaginationConcern
+      before_action :find_restro, except: %w[index create]
       before_action :find_menu_item, except: %w[index create]
       load_and_authorize_resource param_method: :menu_items_params
 
@@ -20,8 +21,10 @@ module Api
       end
 
       def update
-        @menu_item = @menu_item.update menu_items_params
-        render json: { message: 'MenuItem is Updated Successfully.', data: MenuItemSerializer.new(menu_item) }
+
+        @menu_item.update menu_items_params
+        # byebug
+        render json: { message: 'MenuItem is Updated Successfully.', data: MenuitemSerializer.new(@menu_item) }
       end
 
       def show
@@ -39,9 +42,14 @@ module Api
         params.require(:menuitem).permit(:name, :price, :description)
       end
 
-      def find_menu_item
-        @menu_item = MenuItem.find params[:id]
+      def find_restro
+        @restro = Restaurant.find params[:restaurant_id]
       end
+
+      def find_menu_item
+        @menu_item = @restro.menu_items.find params[:id]
+      end
+
     end
   end
 end
