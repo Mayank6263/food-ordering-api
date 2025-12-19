@@ -4,22 +4,14 @@ class Restaurant < ApplicationRecord
   has_many :menu_items, dependent: :destroy
   validates :name, :address, presence: true
   validate lambda {
-             errors.add(:name, 'already exists') if !persisted? && Restaurant.exists?(name: name)
-           }
+   errors.add(:name, 'already exists') if !persisted? && Restaurant.exists?(name: name)
+ }
+ before_save :fetch_lat_long, on: %w[create, update]
 
-  # geocoded_by :address         # tells Geocoder which column to geocode
-  # after_validation :geocode, if: :address_changed?   # auto-fetch lat/lng
-
-  # # Optional helper to build address string from IP location
-  # def self.create_from_ip(name, ip)
-  #   loc = Geocoder.lookup_ip(ip)
-  #   address = loc ? [loc[:city], loc[:state], loc[:country]].compact.join(', ') : nil
-
-  #   create(
-  #     name: name,
-  #     address: address,
-  #     latitude: loc ? loc[:latitude] : nil,
-  #     longitude: loc ? loc[:longitude] : nil
-  #   )
-  # end
+  def fetch_lat_long
+    locations = Geocoder.search(address)
+    return if locations.empty?
+    self.lat = locations[0].data["lat"]
+    self.long = locations[0].data["lon"]
+  end
 end

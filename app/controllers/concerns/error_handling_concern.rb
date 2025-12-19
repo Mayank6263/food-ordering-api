@@ -9,22 +9,22 @@ module ErrorHandlingConcern
     rescue_from CanCan::AccessDenied, with: :access_denied
     rescue_from ArgumentError, with: :handle_argument_error
     rescue_from JWT::ExpiredSignature, with: :expire_handle
+    rescue_from InvalidRecordError, with: :handle_invalid_record
+
   end
 
-  # private
   def handle_argument_error(exception)
-    # Check if the exception message matches the enum error format
     if exception.message.include?('is not a valid')
-      # This is a specific enum error, render a user-friendly response (HTTP 422 Unprocessable Entity or 400 Bad Request)
       render json: { error: "Invalid value provided for an enum field: #{exception.message}" },
              status: :unprocessable_entity
     else
-      # This is a different, potentially unexpected, ArgumentError
-      # Log the error and re-raise it for standard 500 error handling, or handle it differently
-      Rails.logger.error("Unexpected ArgumentError: #{exception.message}")
-      # Depending on your app's needs, you might want to re-raise, or render a generic 500
+    Rails.logger.error("Unexpected ArgumentError: #{exception.message}")
       raise exception
     end
+  end
+
+  def handle_invalid_record(exception)
+    render json: { error: "Invalid record", message: exception }
   end
 
   def expire_handle

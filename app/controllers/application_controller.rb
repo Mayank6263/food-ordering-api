@@ -3,8 +3,7 @@
 class ApplicationController < ActionController::API
   include ErrorHandlingConcern
   before_action :authenticate_user
-  rescue_from InvalidRecordError, with: :handle_invalid_record
-  
+
   private
 
   def authenticate_user
@@ -26,10 +25,5 @@ class ApplicationController < ActionController::API
 
   def current_user
     @current_user
-  end
- 
-  def handle_invalid_record(exception)
-    # byebug
-    render json: { error: "Invalid record", message: exception }
   end
 end
