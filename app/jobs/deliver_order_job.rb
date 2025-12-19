@@ -1,12 +1,10 @@
-# require_relative 'event_handler'
-
 class DeliverOrderJob < ApplicationJob
   queue_as :default
   sidekiq_options retry: 2
 
   def perform(order)
-    status = "deliver"
+    order.status = "deliver"
     order.save!
-
   end
+
 end

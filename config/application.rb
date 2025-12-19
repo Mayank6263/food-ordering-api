@@ -38,5 +38,7 @@ module FoodOrderingApi
 
     config.middleware.use config.session_store, config.session_options
 
+    config.timezone = 'Asia/Kolkata'
+
   end
 end

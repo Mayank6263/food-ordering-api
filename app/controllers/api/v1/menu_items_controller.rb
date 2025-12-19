@@ -9,7 +9,6 @@ module Api
       load_and_authorize_resource param_method: :menu_items_params
 
       def index
-        # byebug
         render json: { message: 'All available Items.', data: @result, page_details: @page }
       end
 
@@ -21,9 +20,7 @@ module Api
       end
 
       def update
-
         @menu_item.update menu_items_params
-        # byebug
         render json: { message: 'MenuItem is Updated Successfully.', data: MenuitemSerializer.new(@menu_item) }
       end
 
@@ -33,7 +30,7 @@ module Api
 
       def destroy
         @menu_item.destroy
-        render json: { message: "Successfully Deleted #{menu_item.name}" }
+        render json: { message: "Successfully Deleted #{@menu_item.name}" }
       end
 
       private

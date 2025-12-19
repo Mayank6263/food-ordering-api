@@ -3,38 +3,31 @@
 module Api
   module V1
     class OrdersController < ApplicationController
+      include PaginationConcern
       before_action :find_order, except: %w[index create]
+      before_action :order_message, only: %w[update show]
       load_and_authorize_resource param_method: :order_params
 
       def index
-        orders = @current_user.orders
-        render json: { your_orders: 'Your all Orders', data: OrderSerializer.new(orders) }
-      end
-
-      def create
-        order = Order.new order_params
-        order.user_id = current_user.id
-        order.save!
-        render json: { message: 'Your Order', data: OrderSerializer.new(order) }
+        render json: { your_orders: 'Your all Orders', data: OrderSerializer.new(@result), page_detail: @page }
       end
 
       def show
-        render json: { Order_detail: OrderSerializer.new(@order) } # include: [:menu_items, :order_items], fields: {except: [:updated_at]}
+        byebug
+        render json: {message: "Your Order is #{ @msg }.",  Order_detail: OrderSerializer.new(@order) }
       end
 
       def update
         @order.status = params[:order][:status]
         @order.save!
-        msg =  Order::STATUS_MESSAGES[@order.status]
-        render json: { message: "Your Order is #{ msg }", order_details: @order } # ,
-      end
-
-      def destroy
-        order.destroy
-        render json: { message: 'Successfully Deleted Order.' }
+        render json: { message: "Your Order is #{ @msg }", order_details: @order }
       end
 
       private
+
+      def order_message
+        @msg =  Order::STATUS_MESSAGES[@order.status]
+      end
 
       def order_params
         params.require(:order).permit(:total_amount, :status)

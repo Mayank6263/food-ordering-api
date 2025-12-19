@@ -5,13 +5,14 @@ Rails.application.routes.draw do
  mount Sidekiq::Web => '/sidekiq'
   namespace :api do
     namespace :v1 do
-      resources 'orders' do
-        resources 'order_items'
+      resources 'restaurants' do
+        resources 'menu_items', except: :show
       end
 
-      resources 'restaurants' do
-        resources 'menu_items'
+      resources 'orders', except: [:create, :destroy] do
+        resources 'order_items', only: [:create, :show]
       end
+
 
       devise_for :users, path: 'devise', path_names: {
         sign_in: 'login',
@@ -19,10 +20,10 @@ Rails.application.routes.draw do
         registration: 'signup'
 
       },
-                         controllers: {
-                           sessions: 'api/v1/sessions',
-                           registrations: 'api/v1/registrations'
-                         }
+      controllers: {
+       sessions: 'api/v1/sessions',
+       registrations: 'api/v1/registrations'
+     }
     end
   end
   # match '*unmatched', to: 'application#route_not_found', via: :all
