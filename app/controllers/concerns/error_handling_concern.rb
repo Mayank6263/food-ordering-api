@@ -10,7 +10,7 @@ module ErrorHandlingConcern
     rescue_from ArgumentError, with: :handle_argument_error
     rescue_from JWT::ExpiredSignature, with: :expire_handle
     rescue_from InvalidRecordError, with: :handle_invalid_record
-
+    rescue_from IncorrectPaginationError, with: :handle_incorrect_pagination
   end
 
   def handle_argument_error(exception)
@@ -28,16 +28,11 @@ module ErrorHandlingConcern
   end
 
   def expire_handle
-    render json: {
-      messages: "Expired Token"
-    }
+    render json: { messages: "Expired Token" }
   end
 
   def render_unprocessable_entity(exception)
-    render json: {
-      error: 'Validation failed',
-      messages: exception.record.errors.full_messages
-    }
+    render json: { error: 'Validation failed', messages: exception.record.errors.full_messages }
   end
 
   def access_denied
@@ -46,9 +41,11 @@ module ErrorHandlingConcern
 
   def record_not_found
     model_name = self.class.name.demodulize.sub('Controller', '').singularize
-    render json: {
-      messages: "#{model_name} doesn't Exists. "
-    }
+    render json: { messages: "#{model_name} doesn't Exists." }
+  end
+
+  def handle_incorrect_pagination(exception)
+    render json: { message: "Enter page less than total page." }
   end
 
 end
