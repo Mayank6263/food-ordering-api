@@ -28,11 +28,10 @@ module PaginationConcern
     return_page
   end
 
-  # def validate_current_page
-  #   byebug
-  #   @page[:next_page] = 0 if @page[:next_page] > @page[:total_page]
-  #   @result = "Current page should not be greater than total" if @page[:current_page] > @page[:total_page] 
-  # end
+  def validate_current_page
+    @page[:next_page] = 0 if @page[:next_page] > @page[:total_page]
+    raise IncorrectPaginationError if @page[:current_page] > @page[:total_page] 
+  end
 
   def return_page
     @page = { total_entries: @result.count,
@@ -41,7 +40,7 @@ module PaginationConcern
               previous_page: (@result.current_page - 1),
               next_page: (@result.current_page + 1) }
 
-    # validate_current_page
+    validate_current_page
     return @page
   end
 end

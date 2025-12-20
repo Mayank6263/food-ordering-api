@@ -1,0 +1,3 @@
+class IncorrectPaginationError < StandardError 
+
+end;
