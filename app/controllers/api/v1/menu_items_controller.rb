@@ -3,19 +3,18 @@
 module Api
   module V1
     class MenuItemsController < ApplicationController
-      include PaginationConcern
-      before_action :find_restro, except: %w[index create]
-      before_action :find_menu_item, except: %w[index create]
+      include Pagination
+
+      before_action :find_restro, except: %w(index create menu_item_search)
+      before_action :find_menu_item, only: %w(update show destroy)
       load_and_authorize_resource param_method: :menu_items_params
 
       def index
-        render json: { message: 'All available Items.', data: @result, page_details: @page }
+        render json: { data: @result, page_details: return_page }
       end
 
       def create
-        menu_item = MenuItem.new menu_items_params
-        menu_item.restaurant_id = params[:restaurant_id]
-        menu_item.save!
+        menu_item = @restro.menu_items.create menu_items_params
         render json: { message: 'Successfully Created MenuItem.', data: MenuitemSerializer.new(menu_item) }
       end
 
@@ -25,12 +24,22 @@ module Api
       end
 
       def show
-        render json: { data: MenuItemSerializer.new(@menu_item) }
+        render json: { data: MenuItemSerializer.new( @menu_item ) }
+      end
+
+      def menu_item_search
+        menuitems = MenuItem.search_menu( params[:query] )
+        render json: { message: "MenuItems", data: menuitems }
+      end
+
+      def restro_item_search
+        menuitems = @restro.menu_items.where( "name ilike ?", "%#{params[:query]}%" )
+        render json: { message: "MenuItems", data: menuitems }
       end
 
       def destroy
         @menu_item.destroy
-        render json: { message: "Successfully Deleted #{@menu_item.name}" }
+        render json: { message: "Successfully Deleted #{ @menu_item.name }" }
       end
 
       private
@@ -46,7 +55,6 @@ module Api
       def find_menu_item
         @menu_item = @restro.menu_items.find params[:id]
       end
-
     end
   end
 end

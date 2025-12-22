@@ -3,17 +3,17 @@
 module Api
   module V1
     class RestaurantsController < ApplicationController
-      include PaginationConcern
+      include Pagination
       load_and_authorize_resource param_method: :restro_params
-      before_action :find_restro, except: %w[index create]
+      before_action :find_restro, except: %w[index create search]
 
       def index
-        render json: { message: 'All restro ', data: @result, page_detail: @page }
+
+        render json: { data: @result, page_detail: return_page }
       end
 
       def create
-        restaurant = Restaurant.new restro_params
-        restaurant.save!
+        restaurant = Restaurant.create! restro_params
         render json: { messages: 'Successfully Created Restaurant', data: RestaurantSerializer.new(restaurant) }
       end
 
@@ -24,6 +24,12 @@ module Api
       def update
         @restaurant.update restro_params
         render json: { message: 'Your Updated Restaurant.',data: @restaurant }
+      end
+
+      def search
+        query = params[:query]
+        restaurant = Restaurant.perform_search(query)
+        render json: { message: "Restro ", data: restaurant }
       end
 
       def destroy

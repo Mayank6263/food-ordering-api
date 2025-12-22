@@ -67,6 +67,8 @@ gem 'cancancan', '~> 3.0'
 
 gem 'awesome_print', '~> 1.9'
 
-gem "razorpay", "~> 3.2"
+
+
+# gem "searchkick", "~> 4.6"
 
 gem "sidekiq", "~> 6.5"

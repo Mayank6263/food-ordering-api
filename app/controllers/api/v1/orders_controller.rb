@@ -3,18 +3,17 @@
 module Api
   module V1
     class OrdersController < ApplicationController
-      include PaginationConcern
+      include Pagination
       before_action :find_order, except: %w[index create]
       before_action :order_message, only: %w[update show]
       load_and_authorize_resource param_method: :order_params
 
       def index
-        render json: { your_orders: 'Your all Orders', data: OrderSerializer.new(@result), page_detail: @page }
+        render json: { your_orders: 'Your all Orders', data: OrderSerializer.new( @result ), page_detail: return_page }
       end
 
       def show
-        byebug
-        render json: {message: "Your Order is #{ @msg }.",  Order_detail: OrderSerializer.new(@order) }
+        render json: {message: "Your Order is #{ @msg }.",  Order_detail: OrderSerializer.new( @order ) }
       end
 
       def update
