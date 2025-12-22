@@ -5,7 +5,10 @@ Rails.application.routes.draw do
  mount Sidekiq::Web => '/sidekiq'
   namespace :api do
     namespace :v1 do
+      get 'restaurants/search', 'restaurants#search'
       resources 'restaurants' do
+        get 'menu_items/restro_item_search', 'menu_items#restro_item_search'
+        get 'menu_items/menu_item_search', 'menu_items#menu_item_search'
         resources 'menu_items', except: :show
       end
 

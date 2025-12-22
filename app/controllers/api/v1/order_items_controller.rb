@@ -7,9 +7,7 @@ module Api
       load_and_authorize_resource param_method: :order_item_params
 
       def create
-        # add_order
-        order = Order.create!(user_id: current_user.id)
-        order_item = order.add_order(order_item_params)
+        order = Order.create(user_id: current_user.id)
         order_item = order.order_items.new order_item_params
         order_item.order_id = order.id
         order_item.save!
