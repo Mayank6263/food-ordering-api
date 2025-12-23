@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module ErrorHandlingConcern
+module ErrorHandling
   extend ActiveSupport::Concern
 
   included do
@@ -16,9 +16,9 @@ module ErrorHandlingConcern
   def handle_argument_error(exception)
     if exception.message.include?('is not a valid')
       render json: { error: "Invalid value provided for an enum field: #{exception.message}" },
-             status: :unprocessable_entity
+      status: :unprocessable_entity
     else
-    Rails.logger.error("Unexpected ArgumentError: #{exception.message}")
+      Rails.logger.error("Unexpected ArgumentError: #{exception.message}")
       raise exception
     end
   end

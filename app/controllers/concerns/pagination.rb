@@ -10,10 +10,10 @@ module Pagination
   def paginate_attributes
     model = controller_name.capitalize.classify.constantize
 
-    menu_list if model.is_a?(MenuItem)
-    order_list if model.is_a?(Order)
+    return menu_list if model == MenuItem
+    return order_list if model == Order
 
-    @result = model.paginate(page: params[:page], per_page: params[:per_page])
+    @result = model.search_restro(params[:query]).paginate(page: params[:page], per_page: params[:per_page])
     return_page
   end
 

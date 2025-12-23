@@ -4,6 +4,7 @@ module Api
   module V1
     class RegistrationsController < Devise::RegistrationsController
       skip_before_action :authenticate_user
+      before_action :find_user, only: %w(update show)
       # GET /resource/sign_up
       # def new
       #   super
@@ -22,15 +23,14 @@ module Api
         end
       end
 
-      def update
-        @user = User.find params[:id]
-        @user.update user_params
-      end
-
       private
 
       def user_params
         params.require(:user).permit(:email, :name, :password, :role)
+      end
+
+      def find_user
+        @user = User.find params[:id]
       end
 
       # GET /resource/edit

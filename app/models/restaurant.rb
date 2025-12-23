@@ -5,7 +5,6 @@ class Restaurant < ApplicationRecord
    errors.add(:name, 'already exists') if !persisted? && Restaurant.exists?(name: name)
  }
  before_save :fetch_lat_long, on: %w[create, update]
- after_save :search_result, on: :search
 
   def fetch_lat_long
     locations = Geocoder.search(address)
@@ -14,7 +13,7 @@ class Restaurant < ApplicationRecord
     self.long = locations[0].data["lon"]
   end
 
-  def self.perform_search(query)
+  def self.search_restro(query)
     where("name ILIKE ?", "%#{query}%").or(self.where("address ILIKE ?", "%#{query}%"))
   end
 end
