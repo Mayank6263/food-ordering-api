@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Api
   module V1
     class OrderItemsController < ApplicationController
@@ -7,21 +5,15 @@ module Api
       load_and_authorize_resource param_method: :order_item_params
 
       def create
-        order = Order.create(user_id: current_user.id)
-        order_item = order.order_items.new order_item_params
-        order_item.order_id = order.id
-        order_item.save!
+        order = current_user.orders.create!
+        order_item = order.order_items.create! order_item_params.merge(order_id: order.id)
         render json: { message: 'Successfully added Item to cart.', data: order_item }
-      end
-
-      def show
-        render json: OrderitemSerializer.new(@order_item)
       end
 
       private
 
       def order_item_params
-        params.require(:orderitem).permit(:quantity, :menu_item_id)
+        params.require(:order_item).permit(:quantity, :menu_item_id)
       end
 
       def find_order_item

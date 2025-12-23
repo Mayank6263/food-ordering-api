@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::API
-  include ErrorHandlingConcern
+  include ErrorHandling
+
   before_action :authenticate_user
 
   private
