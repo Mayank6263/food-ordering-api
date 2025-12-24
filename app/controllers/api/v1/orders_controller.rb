@@ -10,7 +10,7 @@ module Api
       load_and_authorize_resource param_method: :order_params
 
       def index
-        render json: { orders: OrderSerializer.new(@result), page_detail: return_page }
+        render json: { orders: OrderSerializer.new(@result), page_detail: page_details }
       end
 
       def show
@@ -33,7 +33,7 @@ module Api
       end
 
       def find_order
-        @order = current_user.orders.find params[:id]
+        @order = current_user.orders.find(params[:id])
       end
     end
   end

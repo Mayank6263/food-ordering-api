@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class OrderitemSerializer
+class OrderItemSerializer
   include FastJsonapi::ObjectSerializer
   attributes :quantity, :order_id, :menu_item_id
 

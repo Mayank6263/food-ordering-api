@@ -1,6 +1,6 @@
 class Restaurant < ApplicationRecord
   has_many :menu_items, dependent: :destroy
-  validates :name, :address, presence: true
+  validates :name, :address, presence: true, on: :create
   validate lambda {
    errors.add(:name, 'already exists') if !persisted? && Restaurant.exists?(name: name)
  }
@@ -11,9 +11,5 @@ class Restaurant < ApplicationRecord
     return if locations.empty?
     self.lat = locations[0].data["lat"]
     self.long = locations[0].data["lon"]
-  end
-
-  def self.search_restro(query)
-    where("name ILIKE ?", "%#{query}%").or(self.where("address ILIKE ?", "%#{query}%"))
   end
 end

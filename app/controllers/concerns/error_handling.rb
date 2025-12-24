@@ -10,16 +10,12 @@ module ErrorHandling
     rescue_from ArgumentError, with: :handle_argument_error
     rescue_from JWT::ExpiredSignature, with: :expire_handle
     rescue_from InvalidRecordError, with: :handle_invalid_record
-    rescue_from IncorrectPaginationError, with: :handle_incorrect_pagination
   end
 
   def handle_argument_error(exception)
     if exception.message.include?('is not a valid')
       render json: { error: "Invalid value provided for an enum field: #{exception.message}" },
       status: :unprocessable_entity
-    else
-      Rails.logger.error("Unexpected ArgumentError: #{exception.message}")
-      raise exception
     end
   end
 
@@ -28,7 +24,7 @@ module ErrorHandling
   end
 
   def expire_handle
-    render json: { messages: "Expired Token" }
+    render json: { messages: "Token is Expired." }
   end
 
   def render_unprocessable_entity(exception)
@@ -42,10 +38,6 @@ module ErrorHandling
   def record_not_found
     model_name = self.class.name.demodulize.sub('Controller', '').singularize
     render json: { messages: "#{model_name} doesn't Exists." }
-  end
-
-  def handle_incorrect_pagination(exception)
-    render json: { message: "Enter page less than total page." }
   end
 
 end

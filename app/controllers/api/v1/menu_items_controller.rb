@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Api
   module V1
     class MenuItemsController < ApplicationController
@@ -10,22 +8,22 @@ module Api
       load_and_authorize_resource param_method: :menu_items_params
 
       def index
-        render json: { data: @result, page_details: return_page }
+        render json: { menu_item: MenuItemSerializer.new(@result), page_details: page_details }
       end
 
       def create
-        menu_item = @restro.menu_items.create menu_items_params
-        render json: { data: MenuitemSerializer.new(menu_item) }
+        menu_item = @restro.menu_items.create(menu_items_params)
+        render json: MenuItemSerializer.new(menu_item)
       end
 
       def update
         @menu_item.update menu_items_params
-        render json: { data: MenuitemSerializer.new(@menu_item) }
+        render json:  MenuItemSerializer.new(@menu_item)
       end
 
       def search
-        menuitems = MenuItem.search_menu(params[:query])
-        render json: { data: menuitems }
+        menu_items = MenuItem.search_menu(params[:query])
+        render json: { data: menu_items }
       end
 
       def destroy
@@ -40,11 +38,11 @@ module Api
       end
 
       def find_restro
-        @restro = Restaurant.find params[:restaurant_id]
+        @restro = Restaurant.find(params[:restaurant_id])
       end
 
       def find_menu_item
-        @menu_item = @restro.menu_items.find params[:id]
+        @menu_item = @restro.menu_items.find(params[:id])
       end
     end
   end

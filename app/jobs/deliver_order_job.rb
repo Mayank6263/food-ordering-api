@@ -3,7 +3,7 @@ class DeliverOrderJob < ApplicationJob
   sidekiq_options retry: 2
 
   def perform(order)
-    order.status = "deliver"
+    order.status = "delivered"
     order.save!
   end
 
