@@ -6,29 +6,29 @@ module Api
       include Pagination
 
       load_and_authorize_resource param_method: :restro_params
-      before_action :find_restro, except: %w[index create search]
+      before_action :find_restro, except: %w(index create)
 
       def index
-        render json: { data: @result, page_detail: return_page }
+        render json: { orders: RestaurantSerializer.new(@result), page_detail: page_details }
       end
 
       def create
-        restaurant = Restaurant.create! restro_params
-        render json: { data: RestaurantSerializer.new(restaurant) }
+        restaurant = Restaurant.create!(restro_params)
+        render json: RestaurantSerializer.new(restaurant)
       end
 
       def show
-        render json: { data: RestaurantSerializer.new(@restaurant) }
+        render json: RestaurantSerializer.new(@restaurant)
       end
 
       def update
-        @restaurant.restro_params
+        @restaurant.update!(restro_params)
         render json: { data: @restaurant }
       end
 
       def destroy
         @restaurant.destroy
-        render json: { message: "Successfully deleted Restaurant #{ @restaurant.name }." }
+        render json: { message: "Successfully deleted Restaurant #{@restaurant.name}." }
       end
 
       private
@@ -38,7 +38,7 @@ module Api
       end
 
       def find_restro
-        @restaurant = Restaurant.find params[:id]
+        @restaurant = Restaurant.find(params[:id])
       end
     end
   end

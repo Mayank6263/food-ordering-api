@@ -4,8 +4,8 @@ class Order < ApplicationRecord
   STATUS_MESSAGES = {
     'pending'   => 'Is Yet to Ordered',
     'ordered'   => 'is on way',
-    'deliver'   => 'Delivered',
-    'cancel'    => 'Cancelled'
+    'delivered'   => 'Delivered',
+    'cancelled'    => 'Cancelled'
   }.freeze
 
   belongs_to :user
@@ -17,8 +17,7 @@ class Order < ApplicationRecord
   private
 
   def validate_status_attribute
-    byebug
-    if status_was.in?('deliver', 'cancel')
+    if status_was == 'deliver' || status_was == 'cancel'
       raise InvalidRecordError, "Order cannot be edited once delivered or cancelled."
     end
     update_total

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class MenuitemSerializer
+class MenuItemSerializer
   include FastJsonapi::ObjectSerializer
   attributes :name, :price, :description, :restaurant_id
 

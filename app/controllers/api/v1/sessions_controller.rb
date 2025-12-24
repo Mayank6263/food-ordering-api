@@ -5,7 +5,7 @@ module Api
     class SessionsController < Devise::SessionsController
       skip_before_action :authenticate_user
       before_action :sign_in_params, only: :create
-      before_action :load_user, only: :create
+      before_action :find_user, only: :create
 
       def create
         if @user&.valid_password?(sign_in_params[:password])
@@ -24,9 +24,9 @@ module Api
         params.require(:user).permit(:email, :password)
       end
 
-      def load_user
+      def find_user
         @user = User.find_for_database_authentication(email: sign_in_params[:email])
-        render json: { messages: 'Cannot find user', status: :not_found, data: {} } unless @user
+        render json: { messages: 'Cannot find user', status: :not_found } unless @user
       end
 
       # GET /resource/sign_in
