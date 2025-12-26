@@ -10,6 +10,12 @@ module ErrorHandling
     rescue_from ArgumentError, with: :handle_argument_error
     rescue_from JWT::ExpiredSignature, with: :expire_handle
     rescue_from InvalidRecordError, with: :handle_invalid_record
+    rescue_from Warden::NotAuthenticated, with: :unauthenticated
+
+  end
+
+  def unauthenticated
+    render json: { error: "You need to confirm your email before continuing." }, status: :unauthorized
   end
 
   def handle_argument_error(exception)

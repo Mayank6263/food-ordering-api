@@ -36,11 +36,11 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
 
   config.action_mailer.smtp_settings = {
-  address: 'smtp.example.com',
+  address: 'smtp.shriffle.com',
   port: 587,
-   :domain => "google.com",
+   :domain => "shriffle.com",
       :user_name => "mayanks@shriffle.com",
-      :password => "Mayank@123",
+      :password => "oaxqrnnayggnwxgj",
       :authentication => "plain",
       :enable_starttls_auto => true
     }

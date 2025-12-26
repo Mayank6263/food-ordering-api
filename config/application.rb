@@ -37,7 +37,9 @@ module FoodOrderingApi
     config.middleware.use ActionDispatch::Cookies
 
     config.middleware.use config.session_store, config.session_options
-
+    config.middleware.delete ActionDispatch::Session::CookieStore
+    config.middleware.delete ActionDispatch::Cookies
+    config.middleware.delete ActionDispatch::Flash
     config.timezone = 'Asia/Kolkata'
 
   end

@@ -3,7 +3,7 @@ module Api
     class MenuItemsController < ApplicationController
       include Pagination
 
-      before_action :find_restro, except: :search
+      before_action :find_restro, except: %w(search create_discount)
       before_action :find_menu_item, only: %w(update destroy)
       load_and_authorize_resource param_method: :menu_items_params
 
@@ -31,7 +31,17 @@ module Api
         render json: { message: "Successfully Deleted #{ @menu_item.name }" }
       end
 
+      def create_discount
+        @menu = MenuItem.find params[:id]
+        @menu.update(discount: params[:discount], valid_till: params[:validity])
+        render json: { discount_amount: @menu }
+      end
+
       private
+
+      # def discount_params
+      #   params.require(:menu_item).permit(:valid_till, :discount)
+      # end
 
       def menu_items_params
         params.require(:menu_item).permit(:name, :price, :description)
