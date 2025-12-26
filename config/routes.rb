@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       get 'menu_items/search', 'menu_items#search'
+      put 'menu_items/:id/create_discount', to: 'menu_items#create_discount'
       resources 'restaurants' do
         resources 'menu_items', except: :show
       end
@@ -23,7 +24,8 @@ Rails.application.routes.draw do
       },
       controllers: {
        sessions: 'api/v1/sessions',
-       registrations: 'api/v1/registrations'
+       registrations: 'api/v1/registrations',
+       confirmations: 'api/v1/confirmations'
      }
 
     end

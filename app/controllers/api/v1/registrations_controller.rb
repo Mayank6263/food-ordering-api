@@ -33,6 +33,12 @@ module Api
         @user = User.find params[:id]
       end
 
+
+      # def after_confirmation_path_for(resource_name, resource)
+      #   # sign_in(resource) # In case you want to sign in the user
+      #   users_complete_profile_path
+      # end
+
       # GET /resource/edit
       # def edit
       #   super
