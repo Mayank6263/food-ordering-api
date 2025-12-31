@@ -25,12 +25,15 @@ class Order < ApplicationRecord
 
   def update_total
     return unless status == "ordered"
+    if menu_items.first.discount.present? && menu_items.first.valid_till.present?
+      total = self.order_items.joins(:menu_item).sum('quantity * (price - discount)')
+    else
+      total = self.order_items.joins(:menu_item).sum('quantity * price')
+    end
+    self.total_amount = total
 
     DeliverOrderJob.set(wait: 1.minutes).perform_later(self)
-
-        total = self.order_items
-    .joins(:menu_item)
-    .sum('quantity * price')
-    self.total_amount = total
   end
 end
+
+

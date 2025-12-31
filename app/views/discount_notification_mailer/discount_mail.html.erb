@@ -1,0 +1,8 @@
+<section>
+  <h2>Welcome to Food Ordering API, <%= @email %></h2>
+</section>
+  <p>
+    <% time = @menu.valid_till - Time.current %>
+    You have a reward of <%= @menu.discount %> on <%= @menu.name %>, which is valid for <%= time/3600 %> Hours from now.
+  </p>
+<p>Thanks for joining and have a great day!</p>

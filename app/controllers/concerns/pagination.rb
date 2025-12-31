@@ -25,7 +25,7 @@ module Pagination
 
   def menu_list
     restro = Restaurant.find params[:restaurant_id]
-    @result = restro.menu_items.paginate(page: params[:page], per_page: params[:per_page])
+    @result = restro.menu_items.order(id: :asc).paginate(page: params[:page], per_page: params[:per_page])
     page_details
   end
 

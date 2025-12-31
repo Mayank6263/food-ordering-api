@@ -2,6 +2,10 @@
 
 Rails.application.routes.draw do
  require 'sidekiq/web'
+ if Rails.env.development? || Rails.env.production?
+    require "rack/session/cookie"
+    mount Sidekiq::Web => '/sidekiq', :as => 'sidekiq'
+  end
  mount Sidekiq::Web => '/sidekiq'
   namespace :api do
     namespace :v1 do
