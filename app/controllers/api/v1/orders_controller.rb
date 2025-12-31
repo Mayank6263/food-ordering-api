@@ -19,7 +19,7 @@ module Api
 
       def update
         @order.update(status: params[:order][:status])
-        render json: { message: "Your Order is #{ @msg }", order_details: @order }
+        render json: { message: "Your Order is #{ @msg }", order_details: OrderSerializer.new(@order) }
       end
 
       private

@@ -10,7 +10,7 @@ module Api
       def create
         if @user&.valid_password?(sign_in_params[:password])
           token = JwtService.encode(user_id: @user.id)
-          sign_in('user', @user)
+          sign_in('users', @user)
           message = { message: 'Signed In Successfully.', token: token }
           render json: UserSerializer.new(@user, meta: message)
         else

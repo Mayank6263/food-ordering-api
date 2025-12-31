@@ -22,7 +22,7 @@ module Api
       end
 
       def search
-        menu_items = MenuItem.search_menu(params[:query])
+        menu_items = MenuItem.where("name ILIKE ?", "%#{params[:query]}%")
         render json: { data: menu_items }
       end
 
@@ -32,16 +32,16 @@ module Api
       end
 
       def create_discount
-        @menu = MenuItem.find params[:id]
-        @menu.update(discount: params[:discount], valid_till: params[:validity])
+        @menu = MenuItem.find(params[:id])
+        @menu.update!(discount_params)
         render json: { discount_amount: @menu }
       end
 
       private
 
-      # def discount_params
-      #   params.require(:menu_item).permit(:valid_till, :discount)
-      # end
+      def discount_params
+        params.require(:menu_item).permit(:discount, :valid_days)
+      end
 
       def menu_items_params
         params.require(:menu_item).permit(:name, :price, :description)

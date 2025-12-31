@@ -6,8 +6,8 @@ module Api
 
       def create
         order = current_user.orders.create!
-        order_item = order.order_items.create! order_item_params.merge(order_id: order.id)
-        render json: { message: 'Successfully added Item to cart.', data: OrderItemSerializer(order_item) }
+        order_item = order.order_items.create!(order_item_params.merge(order_id: order.id))
+        render json: { message: 'Successfully added Item to cart.', data: OrderItemSerializer.new(order_item) }
       end
 
 
