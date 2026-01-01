@@ -3,19 +3,28 @@
 module Api
   module V1
     class SessionsController < Devise::SessionsController
-      skip_before_action :authenticate_user
+      skip_before_action :authenticate_user, only: :create
+      skip_before_action :verify_signed_out_user, only: :destroy
+
       before_action :sign_in_params, only: :create
       before_action :find_user, only: :create
 
       def create
         if @user&.valid_password?(sign_in_params[:password])
           token = JwtService.encode(user_id: @user.id)
-          sign_in('users', @user)
           message = { message: 'Signed In Successfully.', token: token }
           render json: UserSerializer.new(@user, meta: message)
         else
           render json: { message: 'Invalid Password.' }
         end
+      end
+
+      def destroy
+        # THIS is the logout
+        byebug
+        current_user.update_column(:jti, SecureRandom.uuid)
+
+        render json: { message: 'Logged out successfully' }, status: :ok
       end
 
       private

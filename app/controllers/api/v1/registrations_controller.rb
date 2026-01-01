@@ -15,8 +15,9 @@ module Api
         @user = User.new user_params
 
         if @user.save!
+          confirmation_token = @user.confirmation_token
           token = JwtService.encode(user_id: @user.id)
-          message = { messages: 'Sign Up Successfully', token: token, status: :ok }
+          message = { messages: 'Sign Up Successfully', token: token, status: :ok, confirmation_token: confirmation_token }
           render json: UserSerializer.new(@user, meta: message)
         else
           render json: { messages: 'Sign Up Failed', status: :unprocessable_entity }
