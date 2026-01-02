@@ -8,12 +8,12 @@ class Ability
       can :manage, :all
     else
       can %i[read search], [Restaurant, MenuItem]
-      can %i[create read], [Order, OrderItem]
+      can %i[create read destroy], [Order, OrderItem]
       can [:update, :destroy], Order do |order|
         order.user == user
       end
-      can [:update, :destroy], OrderItem do |orderitem|
-        orderitem.user == user
+      can [:update, :destroy, :add_order_item], OrderItem do |orderitem|
+        orderitem.order.user == user
       end
     end
   end
