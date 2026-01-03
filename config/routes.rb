@@ -17,9 +17,7 @@ Rails.application.routes.draw do
 
       # get 'orders/order_item/', 'order_items#show'
       resources 'orders', except: [:create, :destroy] do
-        put 'order_items/add_order_item', 'order_items#add_order_item'
-        resources 'order_items', except: [:index, :show]
-
+        resources 'order_items', only: [:create, :show, :update]
         # post 'orders/order_items', 'order_items#create'
       end
 
