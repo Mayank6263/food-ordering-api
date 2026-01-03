@@ -11,9 +11,13 @@ module Api
 
       def create
         if @user&.valid_password?(sign_in_params[:password])
-          token = JwtService.encode(user_id: @user.id)
-          message = { message: 'Signed In Successfully.', token: token }
-          render json: UserSerializer.new(@user, meta: message)
+          if @user.active_for_authentication?
+            token = JwtService.encode(user_id: @user.id)
+            message = { message: 'Signed In Successfully.', token: token }
+            render json: UserSerializer.new(@user, meta: message)
+          else
+            render json: { message: "Unconfirmed User Please confirm before login." }
+          end
         else
           render json: { message: 'Invalid Password.' }
         end
