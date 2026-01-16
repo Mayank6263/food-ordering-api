@@ -7,6 +7,21 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq', :as => 'sidekiq'
   end
  mount Sidekiq::Web => '/sidekiq'
+ # root to: "api/v1/registrations#new"
+       devise_for :users, path: 'api/v1/devise', path_names: {
+                     sign_in: 'login',
+                     sign_out: 'logout',
+                     registration: 'signup'
+                   },
+                   controllers: {
+                     sessions: 'api/v1/sessions',
+                     registrations: 'api/v1/registrations',
+                     confirmations: 'api/v1/confirmations'
+                   }
+
+    devise_scope :user do
+        root to: 'api/v1/registrations#new'
+      end
   namespace :api do
     namespace :v1 do
       get 'menu_items/search', 'menu_items#search'
@@ -19,18 +34,13 @@ Rails.application.routes.draw do
       resources 'orders', except: [:create, :destroy] do
         resources 'order_items', only: [:create, :show, :update]
         # post 'orders/order_items', 'order_items#create'
+        # post 'payments/pay', to: 'payments#pay'
       end
 
-      devise_for :users, path: 'devise', path_names: {
-        sign_in: 'login',
-        sign_out: 'logout',
-        registration: 'signup'
-      },
-      controllers: {
-       sessions: 'api/v1/sessions',
-       registrations: 'api/v1/registrations',
-       confirmations: 'api/v1/confirmations'
-     }
+      # Stripe routes
+        # post "/checkout", to: "checkout#create"
+        # get "/checkout/success", to: "checkout#success", as: :checkout_success
+        # get "/checkout/cancel", to: "checkout#cancel",  as: :checkout_cancel
 
     end
   end

@@ -168,6 +168,8 @@ GEM
       ruby-graphviz (~> 1.2)
     rails-html-sanitizer (1.5.0)
       loofah (~> 2.19, >= 2.19.1)
+    rails-ujs (0.1.0)
+      railties (>= 3.1)
     railties (5.0.7.2)
       actionpack (= 5.0.7.2)
       activesupport (= 5.0.7.2)
@@ -222,6 +224,16 @@ GEM
     ruby-graphviz (1.2.5)
       rexml
     ruby-progressbar (1.13.0)
+    sass-rails (6.0.0)
+      sassc-rails (~> 2.1, >= 2.1.1)
+    sassc (2.4.0)
+      ffi (~> 1.9)
+    sassc-rails (2.1.2)
+      railties (>= 4.0.0)
+      sassc (>= 2.0)
+      sprockets (> 3.0)
+      sprockets-rails
+      tilt
     sidekiq (6.5.12)
       connection_pool (>= 2.2.5, < 3)
       rack (~> 2.0)
@@ -238,9 +250,11 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    stripe (15.5.0)
     strscan (3.1.6)
     thor (1.2.2)
     thread_safe (0.3.6)
+    tilt (2.7.0)
     timeout (0.4.0)
     tzinfo (1.2.11)
       thread_safe (~> 0.1)
@@ -277,13 +291,17 @@ DEPENDENCIES
   puma (~> 3.0)
   rails (~> 5.0.7, >= 5.0.7.2)
   rails-erd (~> 1.7)
+  rails-ujs (~> 0.1.0)
   razorpay (~> 3.2)
   rspec-rails (~> 4.1)
   rubocop
   rubocop-rails
+  sass-rails (~> 6.0)
   sidekiq (~> 6.5)
   spring
   spring-watcher-listen (~> 2.0.0)
+  sprockets-rails
+  stripe (~> 15.5)
   tzinfo-data
   will_paginate (~> 4.0)
 

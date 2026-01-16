@@ -9,6 +9,10 @@ module Api
       before_action :sign_in_params, only: :create
       before_action :find_user, only: :create
 
+      def new
+        @user = User.new
+      end
+
       def create
         if @user&.valid_password?(sign_in_params[:password])
           if @user.active_for_authentication?

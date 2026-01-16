@@ -1,9 +1,13 @@
 # frozen_string_literal: true
+require 'stripe'
+Stripe.api_key = 'Your Secret Key'
 
-class ApplicationController < ActionController::API
+class ApplicationController < ActionController::Base
   include ErrorHandling
 
   before_action :authenticate_user
+  skip_before_action :authenticate_user, only: :new
+
 
   def current_user
     @current_user
