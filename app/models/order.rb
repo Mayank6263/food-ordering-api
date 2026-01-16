@@ -13,8 +13,20 @@ class Order < ApplicationRecord
   has_many :menu_items, through: :order_items
   enum status: { pending: 0, ordered: 1, delivered: 2, cancelled: 3 }
   before_save :validate_status_attribute, on: :update
+  # before_create :cr, on: :create
+  # before_commit :cmt, on: :create
+
+
 
   private
+
+  # def cr
+  #   byebug
+  # end
+
+  # def cmt
+  #   byebug
+  # end
 
   def validate_status_attribute
     if status_was == 'deliver' || status_was == 'cancel'

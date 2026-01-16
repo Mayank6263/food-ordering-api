@@ -78,3 +78,11 @@ gem "activerecord-session_store", "~> 1.1"
 
 
 gem "razorpay", "~> 3.2"
+
+gem "stripe", "~> 15.5"
+
+gem 'sprockets-rails', :require => 'sprockets/railtie'
+
+gem "sass-rails", "~> 6.0"
+
+gem "rails-ujs", "~> 0.1.0"
